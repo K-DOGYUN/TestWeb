@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>Steam 게임 참가</title>
+</head>
+<body>
+  <p id="status">Steam을 여는 중입니다...</p>
+  <p><a id="fallback" hidden>자동으로 열리지 않으면 여기를 클릭하세요</a></p>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const game = params.get("game");
+    const lobby = params.get("lobby");
+    const host = params.get("host");
+
+    if ([game, lobby, host].every(value => /^\d+$/.test(value ?? ""))) {
+      const steamUrl = `steam://joinlobby/${game}/${lobby}/${host}`;
+      const fallback = document.getElementById("fallback");
+      fallback.href = steamUrl;
+      fallback.hidden = false;
+      location.replace(steamUrl);
+    } else {
+      document.getElementById("status").textContent = "참가 주소가 올바르지 않습니다.";
+    }
+  </script>
+</body>
+</html>
